@@ -1,0 +1,14 @@
+#ifndef _AS5600_PsW_cbbca5380e886eb45660f9565d9e4d78f484a2d7d60682f313ec351bef31dbf4
+#define _AS5600_PsW_cbbca5380e886eb45660f9565d9e4d78f484a2d7d60682f313ec351bef31dbf4
+
+
+
+
+
+
+
+
+
+
+
+#endif

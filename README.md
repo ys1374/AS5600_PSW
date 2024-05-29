@@ -1,0 +1,1 @@
+This is a Library For AS5600 Magnetic Sensor
