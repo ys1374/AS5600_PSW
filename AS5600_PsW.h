@@ -14,17 +14,36 @@ class AS5600_PsW
 
 
 	private:
+		//LSB bits
+		int numberOfLsbBits{ 8 };
+
+		int wireCondition{ -1 };//0 to 5 are taken already
+
 		//Masks
-		static const uint8_t Mask01 = 0b00000011;
-		static const uint8_t Mask23 = 0b00001100;
-		static const uint8_t Mask45 = 0b00110000;
-		static const uint8_t Mask67 = 0b11000000;
+		//static const uint8_t mask01 = 0b00000011;
+		//static const uint8_t mask23 = 0b00001100;
+		//static const uint8_t mask45 = 0b00110000;
+		//static const uint8_t mask67 = 0b11000000;
+		//static const uint8_t lsbMask = 0b00000000;
+		//static const uint8_t msbMask = 0b00000000;
+		
 
 		//Registers
-		static const uint8_t sensorI2CAddress = 0x36; //Sensor Address
-		static const uint8_t ConfigReg = 0x07; //Config Register
-		static const uint8_t rawAngle = 0x0c; // raw angle
-		static const uint8_t Angle = 0x0e; // scaled output value of raw angle
+		static const uint8_t sensorI2CAddress{ 0x36 }; //Sensor Address
+		static const uint8_t configRegister{ 0x07 }; //Config Register
+		static const uint8_t rawAngleRegister{ 0x0c }; // raw angle
+		static const uint8_t angleRegister{ 0x0e }; // scaled output value of raw angle
 
 };
+
+
+
+//struct I2CMagneticSensorConfiguration {
+//	int sensorI2CAddress;
+//	int configRegister;
+//	int rawAngleRegister;
+//	int angleRegister;
+//};
+
+//extern I2CMagneticSensorConfiguration AS5600;
 #endif
