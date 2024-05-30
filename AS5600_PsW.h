@@ -9,6 +9,7 @@ class AS5600_PsW
 	public:
 		void init();
 		int rawAngle();
+		bool chechWireCondition(int);
 
 
 
@@ -31,8 +32,8 @@ class AS5600_PsW
 		//Registers
 		static const uint8_t sensorI2CAddress{ 0x36 }; //Sensor Address
 		static const uint8_t configRegister{ 0x07 }; //Config Register
-		static const uint8_t rawAngleRegister{ 0x0c }; // raw angle
-		static const uint8_t angleRegister{ 0x0e }; // scaled output value of raw angle
+		static const uint8_t rawAngleRegister{ 0x0C }; // raw angle
+		static const uint8_t angleRegister{ 0x0E }; // scaled output value of raw angle
 
 };
 
