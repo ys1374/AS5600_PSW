@@ -4,22 +4,40 @@
 #include <Arduino.h>
 #include "Wire.h"
 
+#define _2PI 6.28318530718f
+#define _powerTwo(x) (1 << (x))
+
 class AS5600_PsW
 	{
 	public:
 		void init();
-		int rawAngle();
 		bool chechWireCondition(int);
+		int rawAngle();
+		float degreeAngle();
+		int fullRotationUpdate();
+		float comulativeRawAngle();
+		float comulativeDegreeAngle();
+		float comulativeRadianAngle();
+		
+		
+		int fullRotation{ 0 };
 
+
+		//sensor Configuration
+		int sensorResolution{ 12 };
 
 
 
 	private:
-		//LSB bits
-		int numberOfLsbBits{ 8 };
+		word readWire();
 
+
+		int numberOfLsbBits{ 8 };//LSB bits
 		int wireCondition{ -1 };//0 to 5 are taken already
+		int previousAngle{ 0 };
+		int fullRotationRawCount = _powerTwo(sensorResolution) - 1;
 
+		
 		//Masks
 		//static const uint8_t mask01 = 0b00000011;
 		//static const uint8_t mask23 = 0b00001100;
@@ -33,7 +51,7 @@ class AS5600_PsW
 		static const uint8_t sensorI2CAddress{ 0x36 }; //Sensor Address
 		static const uint8_t configRegister{ 0x07 }; //Config Register
 		static const uint8_t rawAngleRegister{ 0x0C }; // raw angle
-		static const uint8_t angleRegister{ 0x0E }; // scaled output value of raw angle
+		static const uint8_t degreeAngleRegister{ 0x0E }; // scaled output value of raw angle
 
 };
 
