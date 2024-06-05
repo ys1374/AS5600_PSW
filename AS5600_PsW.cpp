@@ -11,6 +11,7 @@
 void AS5600_PsW::init()
 {	
 	Wire.begin();
+	previousAngle = rawAngle();
 }
 
 word AS5600_PsW::readWire(uint8_t _wireRegisterToRead)
@@ -61,12 +62,42 @@ int AS5600_PsW::rawAngle()
 	return readWire(rawAngleRegister);
 }
 
-float degreeAngle()
+float AS5600_PsW::degreeAngle()
 {
 	return readWire(degreeAngleRegister);
 }
 
+int AS5600_PsW::fullRotationUpdate() {
 
+	float currentAngle = rawAngle();
+	float angleDifference = currentAngle - previousAngle;
+	if (abs(angleDifference) > (0.8f * () fullRotation += (angleDifference > 0) ? -1 : 1;
+
+	previousAngle = currentAngle;
+	return fullRotation;
+}
+
+int AS5600_PsW::comulativeRawAngle()
+{
+	int rotation = fullRotationUpdate();
+	int rawAngle = readWire(rawAngleRegister);
+	int comulativeRawAngle = (rotation * fullRotationRawCount) + previousAngle;
+	return comulativeRawAngle;
+}
+
+double AS5600_PsW::comulativeDegreeAngle()
+{
+	int _comulativeRawAngle = comulativeRawAngle();
+	double _comulativeDegreeAngle = (_comulativeRawAngle / fullRotationRawCount) * (double)360;
+	return _comulativeDegreeAngle;
+}
+
+float AS5600_PsW::comulativeRadianAngle()
+{
+	int _comulativeRawAngle = comulativeRawAngle();
+	double _comulativeRadianAngle = (_comulativeRawAngle / fullRotationRawCount) * _2PI;
+	return _comulativeRadianAngle;
+}
 
 
 //Wire.beginTransmission(sensorI2CAddress); // I2C address of AS5600

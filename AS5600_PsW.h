@@ -4,23 +4,40 @@
 #include <Arduino.h>
 #include "Wire.h"
 
+#define _2PI 6.28318530718f
+#define _powerTwo(x) (1 << (x))
+
 class AS5600_PsW
 	{
 	public:
 		void init();
 		bool chechWireCondition(int);
 		int rawAngle();
-		float DegreeAngle();
+		float degreeAngle();
+		int fullRotationUpdate();
+		float comulativeRawAngle();
+		float comulativeDegreeAngle();
+		float comulativeRadianAngle();
+		
+		
+		int fullRotation{ 0 };
 
+
+		//sensor Configuration
+		int sensorResolution{ 12 };
 
 
 
 	private:
-		
+		word readWire();
+
+
 		int numberOfLsbBits{ 8 };//LSB bits
 		int wireCondition{ -1 };//0 to 5 are taken already
+		int previousAngle{ 0 };
+		int fullRotationRawCount = _powerTwo(sensorResolution) - 1;
 
-		word readWire();
+		
 		//Masks
 		//static const uint8_t mask01 = 0b00000011;
 		//static const uint8_t mask23 = 0b00001100;
