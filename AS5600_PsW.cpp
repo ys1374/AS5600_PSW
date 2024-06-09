@@ -8,6 +8,7 @@
 //};
 
 
+
 void AS5600_PsW::init()
 {	
 	Wire.begin();
@@ -16,8 +17,8 @@ void AS5600_PsW::init()
 
 word AS5600_PsW::readWire(uint8_t _wireRegisterToRead)
 {
-	uint8_t MSB{ 0 };
-	uint8_t LSB{ 0 };
+	uint8_t _MSB{ 0 };
+	uint8_t _LSB{ 0 };
 
 	Wire.beginTransmission(sensorI2CAddress);
 	Wire.write(_wireRegisterToRead); //invove the sensor
@@ -28,11 +29,11 @@ word AS5600_PsW::readWire(uint8_t _wireRegisterToRead)
 	Wire.requestFrom(sensorI2CAddress, (uint8_t)2);
 
 	//Read Firstly MSB then LSB
-	MSB = Wire.read();
-	LSB = Wire.read();
+	_MSB = Wire.read();
+	_LSB = Wire.read();
 
 	//numberOfLsbBits is Writen to include more I2C Sensor Later
-	return (MSB << numberOfLsbBits) | LSB;
+	return (_MSB << numberOfLsbBits) | _LSB;
 }
 
 bool AS5600_PsW::chechWireCondition(int _wireCondition)
@@ -69,41 +70,44 @@ float AS5600_PsW::degreeAngle()
 
 int AS5600_PsW::fullRotationUpdate() {
 
-	float currentAngle = rawAngle();
-	float angleDifference = currentAngle - previousAngle;
-	if (abs(angleDifference) > (0.8f * () fullRotation += (angleDifference > 0) ? -1 : 1;
+	float _currentAngle = rawAngle();
+	float _angleDifference = _currentAngle - previousAngle;
+	//if (abs(angleDifference) > (0.8f * () fullRotation += (angleDifference > 0) ? -1 : 1;
+	if (abs(_angleDifference) > (0.8f * fullRotationRawCount)) fullRotation += (_angleDifference > 0) ? -1 : 1;
 
-	previousAngle = currentAngle;
+	previousAngle = _currentAngle;
 	return fullRotation;
 }
 
+
+//Power Mode
+//00 = NOM, 01 = LPM1, 10 = LPM2, 11 = LPM3
+void AS5600_PsW::changePowerMode(word _mode) {
+
+	Wire.beginTransmission(sensorI2CAddress); // I2C address of AS5600
+	Wire.write(configRegister); // Address of CONF register (0x07)
+	Wire.write(0b00000000); // MSB of CONF register (default value)
+	Wire.write(_mode); // LSB of CONF register 
+	wireCondition = Wire.endTransmission();
+
+	if (chechWireCondition(wireCondition) == 0) return;
+
+}
+
+
 int AS5600_PsW::comulativeRawAngle()
 {
-	int rotation = fullRotationUpdate();
-	int rawAngle = readWire(rawAngleRegister);
-	int comulativeRawAngle = (rotation * fullRotationRawCount) + previousAngle;
-	return comulativeRawAngle;
+	return (fullRotationUpdate() * fullRotationRawCount) + previousAngle;
 }
 
 double AS5600_PsW::comulativeDegreeAngle()
 {
-	int _comulativeRawAngle = comulativeRawAngle();
-	double _comulativeDegreeAngle = (_comulativeRawAngle / fullRotationRawCount) * (double)360;
-	return _comulativeDegreeAngle;
+	return (comulativeRawAngle() / (double)fullRotationRawCount) * 360.0;
 }
 
-float AS5600_PsW::comulativeRadianAngle()
+double AS5600_PsW::comulativeRadianAngle()
 {
-	int _comulativeRawAngle = comulativeRawAngle();
-	double _comulativeRadianAngle = (_comulativeRawAngle / fullRotationRawCount) * _2PI;
-	return _comulativeRadianAngle;
+	return (comulativeRawAngle() / (double)fullRotationRawCount) * _2PI;
 }
 
 
-//Wire.beginTransmission(sensorI2CAddress); // I2C address of AS5600
-//Wire.write(configRegister); // Address of CONF register (0x07)
-//Wire.write(0b00000000); // MSB of CONF register (default value)
-//Wire.write(0b00000001); // LSB of CONF register 
-//wireCondition = Wire.endTransmission();
-//
-//chechWireCondition(wireCondition);
