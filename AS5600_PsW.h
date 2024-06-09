@@ -15,9 +15,10 @@ class AS5600_PsW
 		int rawAngle();
 		float degreeAngle();
 		int fullRotationUpdate();
-		float comulativeRawAngle();
-		float comulativeDegreeAngle();
-		float comulativeRadianAngle();
+		int comulativeRawAngle();
+		double comulativeDegreeAngle();
+		double comulativeRadianAngle();
+		void changePowerMode(word);
 		
 		
 		int fullRotation{ 0 };
@@ -29,7 +30,8 @@ class AS5600_PsW
 
 
 	private:
-		word readWire();
+
+		word readWire(uint8_t);
 
 
 		int numberOfLsbBits{ 8 };//LSB bits
@@ -39,6 +41,8 @@ class AS5600_PsW
 
 		
 		//Masks
+		//static const uint8_t maskInverse0and1bits = (uint8_t)( ( (0x1 << 6) - 1 ) << 2);
+		//static const uint8_t mask01 = 0b00000011;
 		//static const uint8_t mask01 = 0b00000011;
 		//static const uint8_t mask23 = 0b00001100;
 		//static const uint8_t mask45 = 0b00110000;
