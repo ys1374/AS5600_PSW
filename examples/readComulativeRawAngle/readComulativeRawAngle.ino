@@ -3,7 +3,6 @@
 AS5600_PsW Sensor;
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(115200);
   Sensor.init();
 
@@ -15,7 +14,6 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   Serial.println(Sensor.comulativeRawAngle());
   // delay(25);
 }
